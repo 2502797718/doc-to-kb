@@ -84,6 +84,7 @@ PDF ── deps_check ┤                                    mineru_parse.py →
 | 项 | 实测值 |
 |---|---|
 | `mineru-kit` | `<mineru-install>\.venv\Scripts\mineru-kit.exe`，**4.1.3** |
+| `mineru-kit` 查找顺序 | `--mineru-kit` 参数 → **`MINERU_KIT` 环境变量** → `PATH` → 常见安装目录兜底 |
 | 模型目录 | `~/.mineru/models/MinerU-4_models_onnx/`（226MB） |
 | 模型内容 | `Layout/PP-DocLayoutV2` + `OCR/paddleocr` |
 | 生效后端 | **onnx**（`model.small_backend=auto` → 实际 onnx，`onnx_device=gpu`） |

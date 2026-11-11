@@ -92,7 +92,18 @@ Then verify:
 
 ```bash
 python scripts/deps_check.py
-mineru-kit models show     # look for "Effective small backend"
+mineru-kit models show     # look for "Effective small backend" / 生效的小模型后端
+```
+
+**If `mineru-kit` is not on your `PATH`**, point the scripts at it explicitly — the lookup order is
+`--mineru-kit` arg → `MINERU_KIT` env var → `PATH` → common install dirs:
+
+```bash
+# Windows (PowerShell, persistent)
+setx MINERU_KIT "D:\MinerU\MinerU\.venv\Scripts\mineru-kit.exe"
+
+# Linux/macOS
+export MINERU_KIT="$HOME/mineru/.venv/bin/mineru-kit"
 ```
 
 > **⚠️ Note on `deps_check.py` warnings.** If you see `模型 standard ... missing key paths`, **it is usually a false alarm.** The check historically compared against *all optional repos* (torch build, GGUF VLM, etc.). What actually matters is:
@@ -219,6 +230,15 @@ python scripts/postprocess.py --pdf your.pdf --out ./out \
   --chip MYCHIP --manual RM_V1.0 \
   --viking-base viking://resources/shared/chips/MYCHIP/RM_V1.0/ # 4. 去噪+分卷
 python scripts/verify_md.py ./out                               # 5. 四关自检
+```
+
+**若 `mineru-kit` 不在 `PATH` 里**，用环境变量指过去即可（查找顺序：`--mineru-kit` 参数 → `MINERU_KIT` 环境变量 → `PATH` → 常见安装目录）：
+
+```powershell
+setx MINERU_KIT "D:\MinerU\MinerU\.venv\Scripts\mineru-kit.exe"   # Windows
+```
+```bash
+export MINERU_KIT="$HOME/mineru/.venv/bin/mineru-kit"             # Linux/macOS
 ```
 
 ### 关于 `deps_check.py` 的误报（重要）

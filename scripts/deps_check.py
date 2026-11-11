@@ -124,10 +124,24 @@ def check_models(kit: str) -> tuple[bool, str]:
     if not show:
         return False, "models show 无输出（mineru-kit 可能不可用）"
 
-    m = re.search(r"Effective small backend:\s*(\S+)", show)
+    # mineru-kit 的输出会随 locale 变化：英文 "Effective small backend: onnx"
+    # / 中文 "生效的小模型后端: onnx"。两种都要匹配，否则明明齐了也判失败。
+    m = (re.search(r"(?:Effective small backend|生效的小模型后端)\s*[:：]\s*(\S+)", show)
+         or re.search(r"model\.small_backend:\s*(\S+)", show))
     if not m:
-        return False, "读不到 Effective small backend"
+        return False, "读不到生效后端（models show 输出格式未识别）"
     backend = m.group(1).strip()
+    if backend == "auto":
+        # auto 时以仓库目录实际存在者为准，优先 onnx
+        for cand in ("onnx", "torch"):
+            repo_cand = os.path.join(
+                os.environ.get("MINERU_HOME") or os.path.expanduser("~/.mineru"),
+                "models", f"MinerU-4_models_{cand}")
+            if os.path.isdir(repo_cand):
+                backend = cand
+                break
+        else:
+            backend = "onnx"
 
     repo_by_backend = {
         "onnx": "MinerU-4_models_onnx",
