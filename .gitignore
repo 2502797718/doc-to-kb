@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# MinerU / pipeline artifacts (large, machine-specific)
+raw/
+*.zip
+_manifest.json
+_postprocess_report.json
+_postprocess_meta.json
+_mineru_meta.json
+_segments.json
+_segments/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local secrets / machine config
+.env
+*.local
