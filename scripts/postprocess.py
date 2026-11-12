@@ -748,7 +748,16 @@ def main() -> int:
             start_t = v["title"].split("（")[0] if is_first else None
             end_t = end_title_in_page if is_last else None
             sub = slice_page_blocks(blocks, start_t, end_t)
-            if is_last and carry_for[i]:
+            # carry-over 只在「本卷末页没有页内结束锚点」时追加。
+            #
+            # 为什么（2026-11-12 修复，IEC 62586-2 实测 14/52 卷内容重复）：
+            # 当下一卷与本卷末页同页时，end_title_in_page 已把该页切成
+            # [本卷标题 … 下一卷标题)，标题之前的块**已经完整包含在 sub 里**。
+            # 此时再追加 carry_for[i]，同一批块就被渲染两次 —— 表现为
+            # 整段条款（如 5.2.1/5.2.2/5.2.3）在卷内连续重复一遍。
+            # 因此有 end_t 时跳过追加；仅当本卷独占该页尾部（end_t is None）
+            # 才需要把标题前的块补进来。
+            if is_last and carry_for[i] and end_t is None:
                 sub = sub + carry_for[i]
             md, _ = render_blocks(sub, img_prefix)
             if md:

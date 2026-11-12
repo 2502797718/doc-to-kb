@@ -423,7 +423,10 @@ grep -c '](viking://' <out_dir>/*.md
 - **表格偶尔丢**：MinerU 会把个别表格块标成 `table` 但 `content` 为空；本流程计入
   `table_empty` 供抽样复核，**不自动伪造**。
 - **跨页表**仍未合并，会在相邻两卷各出现半张。
-- **无书签 PDF 不支持**，直接报错退出，需人工切分。
+- ~~**无书签 PDF 不支持**，直接报错退出，需人工切分。~~
+  **（2026-11-11 更正）** 无书签 PDF **已支持**：走 `build_toc_from_titles()` 标题块回退。
+  实测 DL/T 645-2007、IEC 61000-4-30、GB/T 18216.12-2025 三份零书签件均成功分卷。
+  只有 MinerU 连标题块都没识别出来时才需人工切分。
 - **MinerU 4.x 与 OV 的 mineru 后端协议不兼容**：OV 0.5.2 的 `_convert_mineru` 期望 2.x/3.x
   同步 API 格式，4.x `/v1/file_parse` 返回二进制附件。本流程**不经过 OV 的 mineru 后端**，
   而是自己调 CLI + 落盘 + `ov add-resource`，绕开该不兼容。
